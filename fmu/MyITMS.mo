@@ -1,4 +1,4 @@
-model MyITMS_exp1 "整车简化仿真环境"
+model MyITMS "整车简化仿真环境"
   // parameter Modelica.Units.SI.Temperature T_in = 303.15 "内部温度";
 
   input Real RPM_blower = 80 "座舱风扇转速（转/分钟）30";
@@ -263,7 +263,7 @@ extent={{-10,-10},{10,10}})));
   TAThermalSystem.HeatExchangers.Condenser condenser(
   redeclare package Medium = TYMedia.Helmholtz.R134a,
     n_segRef = 1,
-    n_segMtl = 1, HX_Init(T0 = p_T_Cabin, T_air0 = p_T_Cabin), redeclare TYBase.Thermal.FluidHeatFlow.Components.BasicComponents.Records.PropertiesRecords.WallMaterialType.WallMaterialAluminium wallmaterial, CF_RefrigerantSideHeatTransfer = 10, CF_AirSideHeatTransfer = 10, RefrigerantTemperature = 25, RefrigerantMass = 0.117458,title="Condensor") 
+    n_segMtl = 1, HX_Init(T0 = p_T_Cabin, T_air0 = p_T_Cabin), redeclare TYBase.Thermal.FluidHeatFlow.Components.BasicComponents.Records.PropertiesRecords.WallMaterialType.WallMaterialAluminium wallmaterial, CF_RefrigerantSideHeatTransfer = 10, CF_AirSideHeatTransfer = 10, RefrigerantTemperature = 25, RefrigerantMass = 0.117458) 
 
     annotation(Placement(transformation(origin={-348,-254.00005},
 extent={{10,10},{-10,-10}},
@@ -276,7 +276,7 @@ extent={{10,-10},{-10,10}})));
 extent={{10,-10},{-10,10}})));
   TAThermalSystem.Compressor.Compressor compressorR134a(
     p0_in = 4.999999999999999e5, p0_out = 9.999999999999999e5,
-    MaximumDisplacement = 3.3e-5, redeclare package Medium = TYMedia.Helmholtz.R134a,title="Compressor") 
+    MaximumDisplacement = 3.3e-5, redeclare package Medium = TYMedia.Helmholtz.R134a) 
     annotation(Placement(transformation(origin={-312,-165.9998},
 extent={{10,-10},{-10,10}})));
   Modelica.Blocks.Math.Gain gain(k = Modelica.Constants.pi / 30) 
@@ -291,7 +291,7 @@ extent={{10,-10},{-10,10}})));
   TAThermalSystem.Sensors.Refrigerant.SuperCoolingSensor superCoolingSensor(redeclare package Medium = TYMedia.Helmholtz.R134a) 
     annotation(Placement(transformation(origin={-280.25,-296},
 extent={{-10,-10},{10,10}})));
-  TAThermalSystem.HeatExchangers.Evaporator evaporatorR134a(HX_Init(T0 = p_T_Cabin, T_air0 = p_T_Cabin), redeclare TYBase.Thermal.FluidHeatFlow.Components.BasicComponents.Records.PropertiesRecords.WallMaterialType.WallMaterialAluminium wallmaterial, redeclare package Medium = TYMedia.Helmholtz.R134a, CF_RefrigerantSideHeatTransfer = 10, CF_AirSideHeatTransfer = 10, RefrigerantTemperature = 25, RefrigerantMass = 0.0734114,title="Evaporator") annotation(Placement(transformation(origin={-195,-218.371},
+  TAThermalSystem.HeatExchangers.Evaporator evaporatorR134a(HX_Init(T0 = p_T_Cabin, T_air0 = p_T_Cabin), redeclare TYBase.Thermal.FluidHeatFlow.Components.BasicComponents.Records.PropertiesRecords.WallMaterialType.WallMaterialAluminium wallmaterial, redeclare package Medium = TYMedia.Helmholtz.R134a, CF_RefrigerantSideHeatTransfer = 10, CF_AirSideHeatTransfer = 10, RefrigerantTemperature = 25, RefrigerantMass = 0.0734114) annotation(Placement(transformation(origin={-195,-218.371},
 extent={{-10,-10},{10,10}},
 rotation=90)));
   TAThermalSystem.Valves.RefrigerantValve.ZetaFlow zetaFlow(redeclare package Medium = TYMedia.Helmholtz.R134a,
@@ -315,7 +315,7 @@ rotation=-270)));
   TAThermalSystem.HeatExchangers.CoolingRadiatorNTU.ChillerPlateCooling chillerPlate(redeclare model Friction = TYBase.Thermal.FluidHeatFlow.PressureLoss.LiquidPressureDrop.SingularPressureDrop, water(redeclare model Friction = TYBase.Thermal.FluidHeatFlow.PressureLoss.LiquidPressureDrop.SingularPressureDrop),
 
     p0 = 1.6e5,
-    T0 = p_T_Cabin, redeclare package RefMedium = TYMedia.Helmholtz.R134a, simplePipe(RefrigerantTemperature = 15, RefrigerantMass = 0.270458, RefrigerantMassDistribution = 1),CF_RefrigerantSideHeatTransfer=1,CF_WaterSideHeatTransfer=1,title="Chiller Plate") 
+    T0 = p_T_Cabin, redeclare package RefMedium = TYMedia.Helmholtz.R134a, simplePipe(RefrigerantTemperature = 15, RefrigerantMass = 0.270458, RefrigerantMassDistribution = 1),CF_RefrigerantSideHeatTransfer=1,CF_WaterSideHeatTransfer=1) 
 
 
 
@@ -378,7 +378,7 @@ rotation=-180)));
   TYMotor.Machines.FunctionalDevice.TableMachine TableDC(useHeatPort = true, tableOnFile_MinTorque = false) 
     annotation(Placement(transformation(origin={-337,-198},
 extent={{-10,-10},{10,10}})));
-  TAThermalSystem.PumpAndFan.Fan2Table fan2Table(title="Blower") 
+  TAThermalSystem.PumpAndFan.Fan2Table fan2Table() 
     annotation(Placement(transformation(origin={-46,-52},
 extent={{-10,-10},{10,10}})));
   Modelica.Blocks.Sources.RealExpression realExpression2(y = RPM_blower) 
@@ -752,10 +752,6 @@ color={0,0,255}));
   annotation(Line(origin={7.4643,-43},
 points={{-31.4,7},{-15,7}},
 color={0,0,127}));
-  connect(TableDC3.flange_a, fan2Table.shaft) 
-  annotation(Line(origin={17,-47.9525},
-points={{-0.9357,11.9525},{4,11.9525},{4,-17.0475},{-63,-17.0475},{-63,-14.0475}},
-color={0,0,0}));
   connect(TableDC3.pin_an, battery.pin_n) 
   annotation(Line(origin={-145,-64},
 points={{142.464,40},{142.464,-64},{-138.2,-64},{-138.2,-34}},
@@ -824,4 +820,8 @@ thickness=1));
   points={{-0.157926,4.56788},{-0.157896,-3.57185}},
   color={0,170,255},
   thickness=1));
-  end MyITMS_exp1;
+  connect(TableDC3.flange_a, fan2Table.shaft) 
+  annotation(Line(origin={-13,-50},
+  points={{29.0643,14},{32.0643,14},{32.0643,-15},{-33,-15},{-33,-12}},
+  color={0,0,0}));
+  end MyITMS;
